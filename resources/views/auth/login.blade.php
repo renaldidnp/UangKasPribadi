@@ -1,47 +1,70 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('layouts.guest')
 
+@section('title', 'Login')
+
+@section('auth-title', 'Kas Kecil')
+
+@section('auth-subtitle', 'Kelola keuangan pribadi dengan mudah')
+
+@section('content')
+    <!-- Session Status -->
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+
+    <!-- Form Login -->
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <!-- Email -->
+        <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input id="email" type="email" name="email" class="form-input @error('email') error @enderror"
+                value="{{ old('email') }}" required autofocus autocomplete="username" placeholder="nama@email.com">
+            @error('email')
+                <span class="error-message">{{ $message }}</span>
+            @enderror
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="password" name="password" class="form-input @error('password') error @enderror"
+                required autocomplete="current-password" placeholder="Masukkan password">
+            @error('password')
+                <span class="error-message">{{ $message }}</span>
+            @enderror
         </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+        <!-- Remember Me & Forgot Password -->
+        <div class="remember-forgot">
+            <label class="remember-me">
+                <input type="checkbox" name="remember" id="remember_me">
+                <span>Ingat saya</span>
             </label>
-        </div>
 
-        <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
+                <a href="{{ route('password.request') }}" class="forgot-link">
+                    Lupa password?
                 </a>
             @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
         </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn-primary">
+            Masuk
+        </button>
     </form>
-</x-guest-layout>
+
+    <!-- Divider -->
+    <div class="divider">
+        <span>atau</span>
+    </div>
+
+    <!-- Register Link -->
+    <div class="auth-link">
+        Belum punya akun? <a href="{{ route('register') }}">Daftar sekarang</a>
+    </div>
+@endsection
