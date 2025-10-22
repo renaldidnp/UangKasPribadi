@@ -18,12 +18,12 @@
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
-        <!-- Email -->
+        <!-- Phone (ganti dari email) -->
         <div class="form-group">
-            <label for="email" class="form-label">Email</label>
-            <input id="email" type="email" name="email" class="form-input @error('email') error @enderror"
-                value="{{ old('email') }}" required autofocus autocomplete="username" placeholder="nama@email.com">
-            @error('email')
+            <label for="phone" class="form-label">Nomor HP</label>
+            <input id="phone" type="text" name="phone" class="form-input @error('phone') error @enderror"
+                value="{{ old('phone') }}" required autofocus autocomplete="tel" placeholder="08123456789">
+            @error('phone')
                 <span class="error-message">{{ $message }}</span>
             @enderror
         </div>
