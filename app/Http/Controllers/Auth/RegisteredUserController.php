@@ -14,30 +14,26 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
     public function create(): View
     {
         return view('auth.register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'phone' => ['required', 'string', 'max:15', 'unique:'.User::class], // Ganti email jadi phone
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'phone.required' => 'Nomor HP wajib diisi',
+            'phone.unique' => 'Nomor HP sudah terdaftar',
+            'password.confirmed' => 'Konfirmasi password tidak cocok',
         ]);
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'phone' => $request->phone, // Ganti email jadi phone
             'password' => Hash::make($request->password),
         ]);
 
